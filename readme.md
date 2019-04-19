@@ -53,12 +53,6 @@ The script will give you some options, then start to configure your OpenCV build
     ...
 
     --
-    --   Python 2:
-    --     Interpreter:                 /usr/bin/python2.7 (ver 2.7.14)
-    --     Libraries:                   /usr/lib/x86_64-linux-gnu/libpython2.7.so (ver 2.7.14)
-    --     numpy:                       /home/rtaylor/.local/lib/python2.7/site-packages/numpy/core/include (ver 1.14.1)
-    --     install path:                /home/rtaylor/Workspace/opencv_venv/test_venv/lib/python3.6/site-packages/cv2/python-2.7
-    --
     --   Python 3:
     --     Interpreter:                 /home/rtaylor/Workspace/opencv_venv/test_venv/bin/python3 (ver 3.6.3)
     --     Libraries:                   /usr/lib/x86_64-linux-gnu/libpython3.6m.so (ver 3.6.3)
@@ -78,8 +72,21 @@ The script will give you some options, then start to configure your OpenCV build
 
 Check the options and paths to ensure everything is configured as expected. If everything looks good, then you can build and install OpenCV:
 
+    cd build
     make -j4
     make install
+
+To verify, enable your virtual environment, import OpenCV, and check versions and file paths:
+
+    $ source ~/path/to/venv/bin/activate
+    (venv) $ python -V
+    Python 3.6.3
+    (venv) $ python
+    >>> import cv2
+    >>> cv2.__version__
+    '3.4.6-dev'
+    >>> cv2.__file__
+    '~/path/to/venv/lib/python3.6/site-packages/cv2/python-3.6/cv2.cpython-36m-x86_64-linux-gnu.so'
 
 
 ## Author & License
