@@ -7,20 +7,20 @@ cwd=$(pwd)
 
 # Warn user if build folder already exists
 if [ -d "build" ]; then
-      echo "$0 error: build directory already exists"
-      exit 1
+    echo "$0 error: build directory already exists"
+    exit 1
 fi
 
 # Determine the path to the target virtual environment dir
 venvDir=$1
 if [ -z $venvDir ]; then
-      # path not given, so request it as input from the user
-      read -e -p "Virtual environment directory: " venvDir
-      venvDir="${venvDir/#\~/$HOME}"
+    # path not given, so request it as input from the user
+    read -e -p "Virtual environment directory: " venvDir
+    venvDir="${venvDir/#\~/$HOME}"
 fi
 if [[ ! -d $venvDir ]]; then
-      echo "$0 error: invalid virtual environment directory: $venvDir"
-      exit 1
+    echo "$0 error: invalid virtual environment directory: $venvDir"
+    exit 1
 fi
 
 # Get venv directory as absolute path
@@ -30,55 +30,66 @@ cd $cwd
 
 # Check if the dir is actually a venv
 if [ ! -f $venvDir/bin/activate ]; then
-      echo "$0 error: directory is not a virtual environment: $venvDir"
-      exit 1
+    echo "$0 error: directory is not a virtual environment: $venvDir"
+    exit 1
 fi
 
 # Does the user want to build the OpenCV examples too?
 read -p "Build OpenCV examples? [y/N] " buildExamples
 case $buildExamples in
-  [Yy]* ) buildExamples=1 ;;
-  * ) buildExamples=0 ;;
+    [Yy]* ) buildExamples=1 ;;
+    * ) buildExamples=0 ;;
 esac
 
-# For Ubuntu 17.10
-sudo apt -y install software-properties-common
-sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+# Option to skip installing dependencies
+read -p "Install system dependencies? [Y/n] " installDeps
+case $installDeps in
+    [Nn]* ) installDeps=0 ;;
+    * ) installDeps=1 ;;
+esac
 
-# Update system
-sudo apt -y update
-sudo apt -y upgrade
-sudo apt -y remove x264 libx264-dev
+if [ $installDeps = 1 ]; then
 
-# Install dependencies
-sudo apt -y install build-essential checkinstall cmake pkg-config yasm
-sudo apt -y install git gfortran
-sudo apt -y install libjpeg8-dev
-sudo apt -y install libpng12-dev
-sudo apt -y install libjasper-dev
-sudo apt -y install libtiff-dev libtiff5-dev
-sudo apt -y install libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev
-sudo apt -y install libxine2-dev libv4l-dev
+    # For Ubuntu 17.10
+    sudo apt -y install software-properties-common
+    sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
 
-cd /usr/include/linux
-sudo ln -s -f ../libv4l1-videodev.h videodev.h
-cd $cwd
- 
-sudo apt -y install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
-sudo apt -y install libgtk2.0-dev libtbb-dev qt5-default
-sudo apt -y install libatlas-base-dev
-sudo apt -y install libfaac-dev libmp3lame-dev libtheora-dev
-sudo apt -y install libvorbis-dev libxvidcore-dev
-sudo apt -y install libopencore-amrnb-dev libopencore-amrwb-dev
-sudo apt -y install libavresample-dev
-sudo apt -y install x264 v4l-utils
- 
-# Optional dependencies
-sudo apt -y install libprotobuf-dev protobuf-compiler
-sudo apt -y install libgoogle-glog-dev libgflags-dev
-sudo apt -y install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
-sudo apt -y install python3-dev python3-pip python3-venv
-sudo apt -y install python3-testresources
+    # Update system
+    sudo apt -y update
+    sudo apt -y upgrade
+    sudo apt -y remove x264 libx264-dev
+
+    # Install dependencies
+    sudo apt -y install build-essential checkinstall cmake pkg-config yasm
+    sudo apt -y install git gfortran
+    sudo apt -y install libjpeg8-dev
+    sudo apt -y install libpng12-dev
+    sudo apt -y install libjasper-dev
+    sudo apt -y install libtiff-dev libtiff5-dev
+    sudo apt -y install libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev
+    sudo apt -y install libxine2-dev libv4l-dev
+
+    cd /usr/include/linux
+    sudo ln -s -f ../libv4l1-videodev.h videodev.h
+    cd $cwd
+
+    sudo apt -y install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+    sudo apt -y install libgtk2.0-dev libtbb-dev qt5-default
+    sudo apt -y install libatlas-base-dev
+    sudo apt -y install libfaac-dev libmp3lame-dev libtheora-dev
+    sudo apt -y install libvorbis-dev libxvidcore-dev
+    sudo apt -y install libopencore-amrnb-dev libopencore-amrwb-dev
+    sudo apt -y install libavresample-dev
+    sudo apt -y install x264 v4l-utils
+
+    # Optional dependencies
+    sudo apt -y install libprotobuf-dev protobuf-compiler
+    sudo apt -y install libgoogle-glog-dev libgflags-dev
+    sudo apt -y install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
+    sudo apt -y install python3-dev python3-pip python3-venv
+    sudo apt -y install python3-testresources
+
+fi
 
 # Now install python libraries within the virtual environment
 source $venvDir/bin/activate
@@ -100,10 +111,10 @@ cd build
 _BUILD_EXAMPLES="OFF"
 _INSTALL_C_EXAMPLES="OFF"
 _INSTALL_PYTHON_EXAMPLES="OFF"
-if [ buildExamples ]; then
-      _BUILD_EXAMPLES="ON"
-      _INSTALL_C_EXAMPLES="ON"
-      _INSTALL_PYTHON_EXAMPLES="ON"
+if [ $buildExamples = 1 ]; then
+    _BUILD_EXAMPLES="ON"
+    _INSTALL_C_EXAMPLES="ON"
+    _INSTALL_PYTHON_EXAMPLES="ON"
 fi
 
 # Finally execute cmake
