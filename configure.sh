@@ -2,6 +2,12 @@
 
 set -e
 
+# Warn user if build folder already exists
+if [ -d "build" ]; then
+      echo "$0 error: build directory already exists"
+      exit 1
+fi
+
 # Determine the path to the target virtual environment dir
 venvDir=$1
 if [ -z $venvDir ]; then
@@ -9,6 +15,7 @@ if [ -z $venvDir ]; then
       read -e -p "Virtual environment directory: " venvDir
       venvDir="${venvDir/#\~/$HOME}"
 fi
+venvDir=${venvDir%/}  # remove trailing slash
 if [[ ! -d $venvDir ]]; then
       echo "$0 error: invalid virtual environment directory: $venvDir"
       exit 1
@@ -92,7 +99,7 @@ fi
 
 # Finally execute cmake
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
-      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+      -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules \
       -D CMAKE_INSTALL_PREFIX=$venvDir/local/ \
       -D OPENCV_PYTHON_INSTALL_PATH=$venvDir/lib/python$pyVersion/site-packages \
       -D BUILD_EXAMPLES=$_BUILD_EXAMPLES \
