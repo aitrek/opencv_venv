@@ -41,22 +41,22 @@ case $buildExamples in
   * ) buildExamples=0 ;;
 esac
 
+# For Ubuntu 17.10
+sudo apt -y install software-properties-common
+sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+
 # Update system
 sudo apt -y update
 sudo apt -y upgrade
 sudo apt -y remove x264 libx264-dev
 
-# For Ubuntu 17.10
-sudo apt -y install software-properties-common
-sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
-sudo apt -y update
-
 # Install dependencies
 sudo apt -y install build-essential checkinstall cmake pkg-config yasm
 sudo apt -y install git gfortran
-sudo apt -y install libjpeg8-dev libjasper-dev libpng12-dev
-sudo apt -y install libtiff5-dev
-sudo apt -y install libtiff-dev
+sudo apt -y install libjpeg8-dev
+sudo apt -y install libpng12-dev
+sudo apt -y install libjasper-dev
+sudo apt -y install libtiff-dev libtiff5-dev
 sudo apt -y install libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev
 sudo apt -y install libxine2-dev libv4l-dev
 
@@ -128,5 +128,6 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 # -D PYTHON_LIBRARY
 # -D PYTHON_NUMPY_INCLUDE_DIR
 
+# After configuring, execute these
 # make -j4
 # make install
