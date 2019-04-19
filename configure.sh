@@ -2,9 +2,6 @@
 
 set -e
 
-# Specify Python version
-pyVersion="3.6"
-
 # Save current working directory
 cwd=$(pwd)
 
@@ -81,6 +78,9 @@ sudo apt -y install python3-testresources
 # Now install python libraries within the virtual environment
 source $venvDir/bin/activate
 pip install numpy
+
+# Determine Python version
+pyVersion=$(python -c "import sys; print(str(sys.version_info[0])+'.'+str(sys.version_info[1]))")
 
 # Clean submod build directories
 rm -rf opencv/build
