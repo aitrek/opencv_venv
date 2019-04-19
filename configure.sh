@@ -41,6 +41,9 @@ case $buildExamples in
   * ) buildExamples=0 ;;
 esac
 
+# For Ubuntu 17.10
+sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+
 # Update system
 sudo apt -y update
 sudo apt -y upgrade
@@ -59,7 +62,7 @@ cd /usr/include/linux
 sudo ln -s -f ../libv4l1-videodev.h videodev.h
 cd $cwd
  
-sudo apt -y install libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+sudo apt -y install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 sudo apt -y install libgtk2.0-dev libtbb-dev qt5-default
 sudo apt -y install libatlas-base-dev
 sudo apt -y install libfaac-dev libmp3lame-dev libtheora-dev
