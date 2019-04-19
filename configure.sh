@@ -41,9 +41,6 @@ rm -rf opencv_contrib/build
 # Save current working directory
 cwd=$(pwd)
 
-# For Ubuntu 17.10
-sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
-
 # Update system
 sudo apt -y update
 sudo apt -y upgrade
