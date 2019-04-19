@@ -2,6 +2,12 @@
 
 set -e
 
+# Specify Python version
+pyVersion="3.6"
+
+# Save current working directory
+cwd=$(pwd)
+
 # Warn user if build folder already exists
 if [ -d "build" ]; then
       echo "$0 error: build directory already exists"
@@ -15,9 +21,19 @@ if [ -z $venvDir ]; then
       read -e -p "Virtual environment directory: " venvDir
       venvDir="${venvDir/#\~/$HOME}"
 fi
-venvDir=${venvDir%/}  # remove trailing slash
 if [[ ! -d $venvDir ]]; then
       echo "$0 error: invalid virtual environment directory: $venvDir"
+      exit 1
+fi
+
+# Get venv directory as absolute path
+cd $venvDir
+venvDir=$(pwd)
+cd $cwd
+
+# Check if the dir is actually a venv
+if [ ! -f $venvDir/bin/activate ]; then
+      echo "$0 error: directory is not a virtual environment: $venvDir"
       exit 1
 fi
 
@@ -27,19 +43,6 @@ case $buildExamples in
   [Yy]* ) buildExamples=1 ;;
   * ) buildExamples=0 ;;
 esac
-
-# Specify OpenCV version
-cvVersion="3.4"
-
-# Specify Python version
-pyVersion="3.6"
-
-# Clean build directories
-rm -rf opencv/build
-rm -rf opencv_contrib/build
-
-# Save current working directory
-cwd=$(pwd)
 
 # Update system
 sudo apt -y update
@@ -75,9 +78,13 @@ sudo apt -y install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
 sudo apt -y install python3-dev python3-pip python3-venv
 sudo apt -y install python3-testresources
 
-# Now install python libraries within this virtual environment
+# Now install python libraries within the virtual environment
 source $venvDir/bin/activate
 pip install numpy
+
+# Clean submod build directories
+rm -rf opencv/build
+rm -rf opencv_contrib/build
 
 # Create build folder
 cd $cwd
