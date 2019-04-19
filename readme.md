@@ -7,7 +7,7 @@ For those who want to automate the OpenCV compilation process **and** install it
 
 As I am primarily an Ubuntu user, I created this project with Ubuntu strongly in mind (version 17.10 at time of writing). Your mileage may vary depending on your target architecture, OpenCV version, and Python version. Please feel free to create a branch and/ or pull request for other environments.
 
-The script in this repo is a derivation of the installation scripts found at [LearnOpenCV](https://github.com/spmallick/learnopencv). My modifications are mostly focused on better virtual environment handling.
+The script in this repo is a derivation of the installation scripts found at [LearnOpenCV](https://github.com/spmallick/learnopencv).
 
 
 ## How to Use
@@ -21,7 +21,7 @@ Clone the project:
 
 Checkout the branch you want and update the OpenCV submodules:
 
-    git checkout ubuntu17.04-py3-cv3.4
+    git checkout ubuntu17.10-py3-cv3.4
     git submodule update --init --recursive
 
 (Optional) If you want to custom pick your OpenCV version, you can go to the submodules and manually checkout the corresponding branches or tags:
