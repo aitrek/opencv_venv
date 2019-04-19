@@ -41,14 +41,16 @@ case $buildExamples in
   * ) buildExamples=0 ;;
 esac
 
-# For Ubuntu 17.10
-sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
-
 # Update system
 sudo apt -y update
 sudo apt -y upgrade
 sudo apt -y remove x264 libx264-dev
- 
+
+# For Ubuntu 17.10
+sudo apt -y install software-properties-common
+sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+sudo apt -y update
+
 # Install dependencies
 sudo apt -y install build-essential checkinstall cmake pkg-config yasm
 sudo apt -y install git gfortran
